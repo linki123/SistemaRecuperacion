@@ -1,4 +1,4 @@
-const API = "http://localhost:3000";
+const API = "";
 const equivalencia = {
     AD: 4,
     A: 3,
