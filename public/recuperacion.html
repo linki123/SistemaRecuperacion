@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>
+    Plan de Recuperación
+</title>
+
+<link rel="stylesheet"
+      href="/css/styles.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- =========================
+     🧭 HEADER
+========================= -->
+
+<div class="card">
+
+
+    <button onclick="location.href='/'">
+
+        ⬅ Volver al menú
+
+    </button>
+
+
+    <h2>
+
+        🚀 Plan de Recuperación del Colegio
+
+    </h2>
+
+
+    <div class="grid">
+
+
+        <div class="form-group">
+
+            <label>
+                Asesor
+            </label>
+
+
+            <select
+                id="asesor"
+                onchange="
+                cargarColegiosPorAsesor(
+                    this.value,
+                    'colegio'
+                )">
+
+            </select>
+
+
+        </div>
+
+
+
+        <div class="form-group">
+
+
+            <label>
+                Colegio
+            </label>
+
+
+            <select
+                id="colegio"
+                onchange="cargarPlan()">
+
+            </select>
+
+
+        </div>
+
+
+
+        <div class="form-group">
+
+
+            <label>
+                Estado del Colegio
+            </label>
+
+
+            <div
+                id="estado"
+                class="estado critico">
+
+
+                CRÍTICO
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================
+     🚀 INDUCCIONES MYSQL
+========================= -->
+
+
+<!-- =========================
+     🚀 LÍNEA DE INDUCCIONES
+========================= -->
+
+<div class="card">
+
+    <h3>
+        Línea de inducciones
+    </h3>
+
+    <div
+    id="lineaInducciones"
+    class="linea-inducciones">
+</div>
+
+</div>
+
+
+<!-- =========================
+     📋 DETALLE DE INDUCCIÓN
+========================= -->
+
+<div class="card">
+
+    <h3 id="tituloInduccion">
+        Selecciona una inducción
+    </h3>
+
+    <div
+        id="estadoInduccion"
+        style="margin-bottom:10px;">
+    </div>
+
+    <div id="detalleInduccion">
+     
+    </div>
+
+
+<div id="formEvidencia" class="evidencia-card">
+
+    <div class="evidencia-header">
+
+        <div>
+            <h3>📎 Evidencia de la inducción</h3>
+            <p>
+                Registra la constancia mínima del seguimiento realizado.
+            </p>
+        </div>
+
+        <span class="evidencia-badge">
+            Requerido
+        </span>
+
+    </div>
+
+    <div class="evidencia-grid">
+
+        <div class="form-group">
+            <label>Responsable</label>
+            <input
+                type="text"
+                id="evResponsable"
+                placeholder="Ej: Director, administrador, coordinador">
+        </div>
+
+        <div class="form-group">
+            <label>Registro Helpdesk</label>
+            <input
+                type="text"
+                id="evHelpdesk"
+                placeholder="Ej: HD-2026-001">
+        </div>
+
+        <div class="form-group">
+            <label>Captura URL</label>
+            <input
+                type="text"
+                id="evCaptura"
+                placeholder="Pega el enlace de la captura">
+        </div>
+
+        <div class="form-group">
+            <label>Grabación URL</label>
+            <input
+                type="text"
+                id="evGrabacion"
+                placeholder="Pega el enlace de la grabación">
+        </div>
+
+    </div>
+
+    <div class="evidencia-grid evidencia-grid-full">
+
+        <div class="form-group">
+            <label>Acuerdos de cierre</label>
+            <textarea
+                id="evAcuerdos"
+                placeholder="Resume los acuerdos alcanzados con el colegio"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Próxima acción</label>
+            <textarea
+                id="evProximaAccion"
+                placeholder="Indica qué debe realizarse después"></textarea>
+        </div>
+
+    </div>
+
+    <div class="evidencia-footer">
+
+        <div class="form-group">
+            <label>Próxima fecha</label>
+            <input
+                type="date"
+                id="evProximaFecha">
+        </div>
+
+        <div class="evidencia-ayuda">
+            ✅ Helpdesk · 📷 Captura o grabación · 📝 Acuerdos · 📅 Próxima fecha
+        </div>
+
+    </div>
+
+</div>
+
+    <br>
+
+    <button
+        class="btn"
+        onclick="guardarInduccionActual()">
+        Guardar inducción
+    </button>
+
+</div>
+
+
+
+
+<!-- =========================
+     📊 RESUMEN
+========================= -->
+
+
+<div class="card">
+
+    <h2>📊 Progreso de Recuperación</h2>
+
+    <div class="progress">
+        <div class="bar" id="barraProgresoGeneral"></div>
+    </div>
+
+    <div class="summary">
+
+        <div class="box">
+            <small>Avance general</small>
+            <h3 id="pg">0%</h3>
+        </div>
+
+        <div class="box">
+            <small>Completadas</small>
+            <h3 id="induccionesCompletadas">0 de 8</h3>
+        </div>
+
+        <div class="box">
+            <small>En proceso</small>
+            <h3 id="induccionesProceso">0</h3>
+        </div>
+
+        <div class="box">
+            <small>Pendientes</small>
+            <h3 id="induccionesPendientes">8</h3>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+    
+
+
+
+<!-- =========================
+     📦 SCRIPT GLOBAL
+========================= -->
+
+
+<script src="/js/script.js"></script>
+
+
+
+<script>
+
+
+async function iniciar(){
+
+
+    await cargarAsesores(
+        "asesor"
+    );
+
+
+
+    const asesor =
+        document
+        .getElementById(
+            "asesor"
+        )
+        .value;
+
+
+
+    await cargarColegiosPorAsesor(
+        asesor,
+        "colegio"
+    );
+
+
+
+    await cargarInducciones();
+
+
+
+    await cargarPlan();
+
+
+}
+
+
+
+iniciar();
+
+
+
+</script>
+
+
+
+</body>
+
+
+</html>

@@ -1,0 +1,230 @@
+¿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Historial</title>
+
+<link rel="stylesheet"
+      href="/css/styles.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <button class="back-btn"
+                onclick="location.href='/'">
+            ⬅ Volver
+        </button>
+
+        <h2>
+            📈 Historial de Diagnósticos
+        </h2>
+
+        <div class="grid">
+
+            <div class="form-group">
+
+                <label>Asesor</label>
+
+                <select id="asesor"
+                        onchange="
+                        cargarColegiosPorAsesor(
+                            this.value,
+                            'colegio'
+                        )">
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Colegio</label>
+
+                <select id="colegio"
+                        onchange="
+                        cargarHistorial()">
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- HISTORIAL -->
+
+    <div class="card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>%</th>
+                    <th>Nivel</th>
+                    <th>Ver</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="tablaHistorial">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- GRÁFICO -->
+
+    <div class="card">
+
+        <h3>
+            Evolución del Colegio
+        </h3>
+
+        <canvas id="graficoHistorico">
+
+        </canvas>
+
+    </div>
+
+</div>
+
+<!-- =========================
+     MODAL DIAGNÓSTICO
+========================= -->
+
+<div id="modalDiagnostico"
+     style="
+        display:none;
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:rgba(0,0,0,.5);
+        z-index:999;
+     ">
+
+    <div style="
+        background:white;
+        width:90%;
+        max-width:1000px;
+        margin:30px auto;
+        padding:20px;
+        border-radius:10px;
+        max-height:85vh;
+        overflow:auto;
+    ">
+
+        <h3>
+            Diagnóstico
+        </h3>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Módulo</th>
+                    <th>Actividad</th>
+                    <th>Nota</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="detalleDiagnostico">
+
+            </tbody>
+
+        </table>
+
+        <br>
+
+        <h3>
+            Cambios respecto a la revisión anterior
+        </h3>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Actividad</th>
+                    <th>Antes</th>
+                    <th>Después</th>
+                    <th>Impacto</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="tablaCambios">
+
+            </tbody>
+
+        </table>
+
+        <br>
+
+        <button
+            class="btn"
+            onclick="
+            document
+            .getElementById(
+                'modalDiagnostico'
+            )
+            .style.display='none'
+            ">
+            Cerrar
+        </button>
+
+    </div>
+
+</div>
+
+<script src="/js/script.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+async function iniciar() {
+
+    await cargarAsesores("asesor");
+
+    const asesor =
+        document.getElementById("asesor").value;
+
+    await cargarColegiosPorAsesor(
+        asesor,
+        "colegio"
+    );
+
+    cargarHistorial();
+
+}
+
+iniciar();
+
+</script>
+
+</body>
+</html>

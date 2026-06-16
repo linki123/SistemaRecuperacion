@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico de Uso</title>
+
+<link rel="stylesheet" href="/css/styles.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="card">
+
+        <button class="back-btn" onclick="location.href='/'">
+            ⬅ Volver al menú
+        </button>
+
+        <div class="breadcrumb">
+            Inicio / Diagnóstico
+        </div>
+
+        <h2>📊 Diagnóstico de Uso del Sistema</h2>
+
+        <div class="grid">
+
+    <div class="form-group">
+    <label>Asesor</label>
+    <select id="asesor"
+            onchange="cargarColegiosPorAsesor(this.value,'colegio')">
+    </select>
+</div>
+
+<div class="form-group">
+    <label>Colegio</label>
+    <select id="colegio"
+            onchange="mostrarUrlColegio()">
+    </select>
+</div>
+
+<div class="form-group">
+    <label>URL</label>
+    <input type="text"
+           id="urlColegio"
+           readonly>
+</div>
+
+    <div class="form-group">
+        <label>Fecha de Evaluación</label>
+        <input type="date" id="fecha">
+    </div>
+
+</div>
+    </div>
+
+    <!-- TABLA -->
+    <div class="card">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Módulo</th>
+                    <th>Actividad / Evidencia</th>
+                    <th>Calificación</th>
+                    <th>Puntaje</th>
+                </tr>
+            </thead>
+
+            <tbody id="tablaEvaluacion"></tbody>
+
+        </table>
+
+        <div class="summary">
+
+            <div class="box">
+                <small>Total Puntaje</small>
+                <h3 id="totalPuntaje">0</h3>
+            </div>
+
+            <div class="box">
+                <small>Total Máximo</small>
+                <h3 id="totalMaximo">0</h3>
+            </div>
+
+            <div class="box">
+                <small>Porcentaje</small>
+                <h3 id="porcentaje">0%</h3>
+            </div>
+
+            <div class="box">
+                <small>Estado</small>
+                <h3 id="nivel">Crítico</h3>
+            </div>
+
+            <div class="box">
+                <small>Objetivo</small>
+                <h3>70%</h3>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <button class="btn" onclick="guardarDiagnosticoSistema()">
+                Guardar Diagnóstico
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================
+     📦 SCRIPT GLOBAL
+========================= -->
+<script src="/js/script.js"></script>
+
+<script>
+
+/* =========================
+   🧠 CONFIG LOCAL
+========================= */
+
+const items = [
+
+["FINANZAS","Cobro de las pensiones al día"],
+["FINANZAS","Uso del módulo Otros Pagos"],
+["FINANZAS","Uso del módulo Egresos"],
+["FINANZAS","Facturación electrónica integrada con SUNAT"],
+
+["CALIFICACIONES","Creación de registros"],
+["CALIFICACIONES","Generación de libretas"],
+
+["ASISTENCIA","Asistencia de alumnos"],
+["ASISTENCIA","Asistencia del personal"],
+
+["AULA VIRTUAL","Uso de cronología"],
+["AULA VIRTUAL","Material de estudio"],
+["AULA VIRTUAL","Clase en vivo"],
+
+["NOTIFICACIONES","Notificaciones Push"],
+["NOTIFICACIONES","Recordatorios Web"],
+
+["WEB ACTUALIZADA","Portada principal actualizada"],
+["WEB ACTUALIZADA","Documentos de transparencia"],
+["WEB ACTUALIZADA","Libro de reclamaciones virtual"],
+
+["COMPLEMENTARIOS","Uso de módulos complementarios"]
+
+];
+
+
+
+
+/* =========================
+   📊 TABLA
+========================= */
+
+const tbody = document.getElementById("tablaEvaluacion");
+
+items.forEach(item=>{
+
+    tbody.innerHTML += `
+        <tr>
+            <td>${item[0]}</td>
+            <td>${item[1]}</td>
+
+            <td>
+                <select class="nota" onchange="actualizarUI()">
+                    <option value="C">C</option>
+                    <option value="B">B</option>
+                    <option value="A">A</option>
+                    <option value="AD">AD</option>
+                </select>
+            </td>
+
+            <td class="puntaje text-center">0</td>
+        </tr>
+    `;
+});
+
+/* =========================
+   📈 ACTUALIZAR UI
+========================= */
+
+function actualizarUI() {
+
+    const r =
+        calcularDiagnostico(
+            items,
+            equivalencia
+        );
+
+    document.getElementById(
+        "totalPuntaje"
+    ).innerText = r.total;
+
+    document.getElementById(
+        "totalMaximo"
+    ).innerText = r.max;
+
+    document.getElementById(
+        "porcentaje"
+    ).innerText = r.porcentaje + "%";
+
+    document.getElementById(
+        "nivel"
+    ).innerText = r.nivel;
+}
+
+
+
+/* =========================
+   🚀 INIT
+========================= */
+
+/* =========================
+   🚀 INIT
+========================= */
+
+async function iniciar() {
+
+    await cargarAsesores("asesor");
+
+    const asesor =
+        document.getElementById("asesor").value;
+
+    await cargarColegiosPorAsesor(
+        asesor,
+        "colegio"
+    );
+
+    const colegio =
+        document.getElementById("colegio").value;
+
+    if (colegio) {
+
+        await cargarDiagnosticoColegio(
+            colegio
+        );
+
+    }
+
+    actualizarUI();
+}
+
+iniciar();
+
+</script>
+
+</body>
+</html>
