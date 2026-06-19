@@ -684,3 +684,15 @@ button.purple {
 button.purple:hover {
     background: #6d28d9;
 }
+
+#tablaEvaluacion td {
+    color: #1f2937;
+}
+
+#tablaEvaluacion tr {
+    transition: background-color 0.2s ease;
+}
+
+#tablaEvaluacion td:first-child {
+    border-right: 2px solid #d1d5db;
+}
