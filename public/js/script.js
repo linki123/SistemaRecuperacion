@@ -268,6 +268,76 @@ async function cargarColegiosPorAsesor(asesorId, selectId) {
 
 }
 
+
+const coloresModulo = {
+    "FINANZAS": "#E8F1FF",
+    "CALIFICACIONES": "#EAF7EA",
+    "ASISTENCIA": "#FFF4E0",
+    "AULA VIRTUAL": "#F0ECFF",
+    "NOTIFICACIONES": "#E8F7F5",
+    "WEB ACTUALIZADA": "#F7EAF1",
+    "COMPLEMENTARIOS": "#F3F3F3"
+};
+
+function mejorarTablaModulos() {
+    const filas = document.querySelectorAll("#tablaEvaluacion tr");
+    let moduloAnterior = "";
+    let celdaPrincipal = null;
+    let contador = 1;
+
+    filas.forEach(fila => {
+        const celdaModulo = fila.children[0];
+        const modulo = celdaModulo.innerText.trim();
+
+        fila.style.backgroundColor = coloresModulo[modulo] || "#FFFFFF";
+
+        if (modulo === moduloAnterior) {
+            celdaModulo.style.display = "none";
+            contador++;
+            celdaPrincipal.rowSpan = contador;
+        } else {
+            moduloAnterior = modulo;
+            celdaPrincipal = celdaModulo;
+            contador = 1;
+
+            celdaModulo.style.fontWeight = "bold";
+            celdaModulo.style.verticalAlign = "middle";
+            celdaModulo.style.textAlign = "center";
+            celdaModulo.style.backgroundColor = coloresModulo[modulo] || "#FFFFFF";
+        }
+    });
+}
+
+function calcularPromedioModulos() {
+    const filas = document.querySelectorAll("#tablaEvaluacion tr");
+    const resumen = {};
+
+    filas.forEach(fila => {
+        const modulo = fila.children[0].innerText.trim();
+        const nota = fila.querySelector(".nota")?.value;
+
+        if (!nota) return;
+
+        if (!resumen[modulo]) {
+            resumen[modulo] = {
+                total: 0,
+                cantidad: 0
+            };
+        }
+
+        resumen[modulo].total += equivalencia[nota];
+        resumen[modulo].cantidad++;
+    });
+
+    console.log("Promedio por módulo:");
+
+    Object.keys(resumen).forEach(modulo => {
+        const promedio = resumen[modulo].total / resumen[modulo].cantidad;
+        const porcentaje = ((promedio / 4) * 100).toFixed(1);
+
+        console.log(`${modulo}: ${porcentaje}%`);
+    });
+}
 /* =====================================================
    📈 PROGRESO COLEGIO
 ===================================================== */
@@ -355,6 +425,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (colegio) {
 
+        mejorarTablaModulos();
+calcularPromedioModulos();
+
+document.querySelectorAll(".nota").forEach(select => {
+    select.addEventListener("change", () => {
+        calcularPromedioModulos();
+    });
+});
         colegio.addEventListener("change", async () => {
             localStorage.setItem(
                 "colegioSeleccionado",
