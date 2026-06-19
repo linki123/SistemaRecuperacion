@@ -355,17 +355,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (colegio) {
 
-        colegio.addEventListener("change", () => {
+        colegio.addEventListener("change", async () => {
+  localStorage.setItem("colegioSeleccionado", colegio.value);
 
-            localStorage.setItem(
-                "colegioSeleccionado",
-                colegio.value
-            );
+  mostrarUrlColegio();
 
-        });
+  if (typeof cargarDiagnosticoColegio === "function") {
+    await cargarDiagnosticoColegio(colegio.value);
+  }
 
-    }
-
+  if (typeof cargarHistorial === "function") {
+    await cargarHistorial();
+  }
 });
 
 async function cargarDiagnosticoColegio(colegioId) {
