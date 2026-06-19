@@ -1,0 +1,362 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/script.js"></script>
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Uso de Módulos
+    </title>
+
+
+    <!-- CSS GENERAL -->
+    <link rel="stylesheet"
+          href="css/style.css">
+
+
+    <!-- CHART JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+</head>
+
+
+<body>
+
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <h1>
+        📊 Dashboard de Uso de Módulos
+    </h1>
+
+
+    <a href="index.html"
+       class="btn">
+
+        ⬅ Volver al inicio
+
+    </a>
+
+</header>
+
+
+
+
+<!-- ================= FILTROS ================= -->
+
+
+<section class="panel">
+
+
+<h2>
+    Filtros de análisis
+</h2>
+
+
+<div class="filtros-modulos">
+
+
+    <div>
+
+        <label>
+            Asesor
+        </label>
+
+
+        <select id="filtroAsesor">
+
+            <option value="">
+                Todos los asesores
+            </option>
+
+        </select>
+
+    </div>
+
+
+
+    <div>
+
+        <label>
+            Colegio
+        </label>
+
+
+        <select id="filtroColegio">
+
+            <option value="">
+                Todos los colegios
+            </option>
+
+        </select>
+
+    </div>
+
+
+
+    <div>
+
+        <label>
+            Fecha
+        </label>
+
+
+        <select id="filtroFecha">
+
+            <option value="">
+                Todo
+            </option>
+
+
+            <option value="30">
+                Últimos 30 días
+            </option>
+
+
+            <option value="90">
+                Últimos 3 meses
+            </option>
+
+
+        </select>
+
+    </div>
+
+
+
+
+    <div>
+
+        <label>
+            Nivel
+        </label>
+
+
+        <select id="filtroNivel">
+
+            <option value="">
+                Todos
+            </option>
+
+            <option value="Crítico">
+                Crítico
+            </option>
+
+            <option value="Regular">
+                Regular
+            </option>
+
+            <option value="Bueno">
+                Bueno
+            </option>
+
+            <option value="Excelente">
+                Excelente
+            </option>
+
+        </select>
+
+    </div>
+
+
+
+</div>
+
+
+<button class="btn"
+        onclick="cargarDashboardModulos()">
+
+    🔎 Analizar
+
+</button>
+
+
+</section>
+
+
+
+
+
+
+
+<!-- ================= RESUMEN ================= -->
+
+
+<section class="cards-dashboard">
+
+
+<div class="card">
+
+    <p>
+        🏆 Módulo más usado
+    </p>
+
+
+    <h2 id="masUsado">
+        -
+    </h2>
+
+</div>
+
+
+
+
+<div class="card">
+
+    <p>
+        ⚠️ Módulo menos usado
+    </p>
+
+
+    <h2 id="menosUsado">
+        -
+    </h2>
+
+</div>
+
+
+
+
+
+<div class="card">
+
+    <p>
+        📈 Promedio general
+    </p>
+
+
+    <h2 id="promedioGeneral">
+        0%
+    </h2>
+
+</div>
+
+
+
+
+<div class="card">
+
+    <p>
+        📝 Evaluaciones
+    </p>
+
+
+    <h2 id="totalEvaluaciones">
+        0
+    </h2>
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+<!-- ================= GRAFICO ================= -->
+
+
+<section class="panel">
+
+
+<h2>
+    Ranking de módulos
+</h2>
+
+
+<canvas id="graficoModulos">
+
+</canvas>
+
+
+</section>
+
+
+
+
+
+
+
+<!-- ================= TABLA ================= -->
+
+
+<section class="panel">
+
+
+<h2>
+    Detalle por módulo
+</h2>
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+    <th>
+        Módulo
+    </th>
+
+
+    <th>
+        Uso
+    </th>
+
+
+    <th>
+        Nivel
+    </th>
+
+
+    <th>
+        Recomendación
+    </th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody id="tablaModulos">
+
+
+</tbody>
+
+
+
+</table>
+
+
+</section>
+
+
+
+
+
+
+<script src="js/script.js"></script>
+
+
+</body>
+
+
+</html>

@@ -1453,3 +1453,241 @@ function mostrarEstadoUltimaActualizacion(fecha) {
     `;
 
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    if (document.getElementById("graficoModulos")) {
+        cargarUsoModulos();
+    }
+});
+
+/* =====================================================
+   📊 DASHBOARD USO DE MÓDULOS
+===================================================== */
+
+let graficoUsoModulos = null;
+
+
+async function cargarDashboardModulos() {
+
+    const asesor =
+        document.getElementById("filtroAsesor")?.value || "";
+
+    const colegio =
+        document.getElementById("filtroColegio")?.value || "";
+
+    const fecha =
+        document.getElementById("filtroFecha")?.value || "";
+
+    const nivel =
+        document.getElementById("filtroNivel")?.value || "";
+
+
+    const params =
+        new URLSearchParams({
+            asesor,
+            colegio,
+            fecha,
+            nivel
+        });
+
+
+    const res =
+        await fetch(
+            `${API}/modulos-uso?${params}`
+        );
+
+
+    const datos =
+        await res.json();
+
+
+    if (datos.length === 0) {
+        return;
+    }
+
+
+
+    /* ================= CARDS ================= */
+
+
+    const mas =
+        datos[0];
+
+    const menos =
+        datos[datos.length - 1];
+
+
+    const promedio =
+        Math.round(
+            datos.reduce(
+                (a,b)=>a+Number(b.porcentaje),
+                0
+            ) / datos.length
+        );
+
+
+    document.getElementById("masUsado").innerText =
+        `${mas.modulo} ${mas.porcentaje}%`;
+
+
+    document.getElementById("menosUsado").innerText =
+        `${menos.modulo} ${menos.porcentaje}%`;
+
+
+    document.getElementById("promedioGeneral").innerText =
+        promedio + "%";
+
+
+    document.getElementById("totalEvaluaciones").innerText =
+        mas.evaluaciones;
+
+
+
+
+    /* ================= TABLA ================= */
+
+
+    const tabla =
+        document.getElementById("tablaModulos");
+
+
+    tabla.innerHTML = "";
+
+
+    datos.forEach(m => {
+
+
+        let nivel =
+            "Crítico";
+
+
+        let recomendacion =
+            "Reforzar capacitación";
+
+
+        if (m.porcentaje >= 75) {
+
+            nivel="Bueno";
+            recomendacion =
+            "Mantener seguimiento";
+
+        }
+
+        else if (m.porcentaje >= 50){
+
+            nivel="Regular";
+            recomendacion =
+            "Programar refuerzo";
+
+        }
+
+
+
+        tabla.innerHTML += `
+
+        <tr>
+
+            <td>
+                ${m.modulo}
+            </td>
+
+
+            <td>
+                ${m.porcentaje}%
+            </td>
+
+
+            <td>
+                ${nivel}
+            </td>
+
+
+            <td>
+                ${recomendacion}
+            </td>
+
+        </tr>
+
+        `;
+
+
+    });
+
+
+
+
+
+    /* ================= GRAFICO ================= */
+
+
+    const ctx =
+        document
+        .getElementById("graficoModulos");
+
+
+    if (!ctx) return;
+
+
+    if (graficoUsoModulos){
+
+        graficoUsoModulos.destroy();
+
+    }
+
+
+    graficoUsoModulos =
+        new Chart(ctx, {
+
+
+        type:"bar",
+
+
+        data:{
+
+
+            labels:
+                datos.map(x=>x.modulo),
+
+
+            datasets:[{
+
+                label:"Uso (%)",
+
+                data:
+                    datos.map(
+                        x=>x.porcentaje
+                    )
+
+            }]
+
+
+        }
+
+
+    });
+
+
+}
+
+
+
+
+/* cargar automático solamente en modulos.html */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        if (
+            document
+            .getElementById(
+                "graficoModulos"
+            )
+        ){
+
+            cargarDashboardModulos();
+
+        }
+
+    }
+);
