@@ -1183,6 +1183,123 @@ async(req,res)=>{
 
 });
 
+/* =====================================================
+   📊 DASHBOARD USO DE MÓDULOS
+===================================================== */
+
+app.get("/modulos-uso", async (req, res) => {
+
+    try {
+
+        const { asesor, colegio, fecha, nivel } = req.query;
+
+        let filtros = [];
+        let valores = [];
+
+
+        if (asesor) {
+            filtros.push(
+                "d.asesor_id = ?"
+            );
+            valores.push(asesor);
+        }
+
+
+        if (colegio) {
+            filtros.push(
+                "d.colegio_id = ?"
+            );
+            valores.push(colegio);
+        }
+
+
+        if (nivel) {
+            filtros.push(
+                "d.nivel = ?"
+            );
+            valores.push(nivel);
+        }
+
+
+        if (fecha === "30") {
+
+            filtros.push(
+                "d.fecha >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
+            );
+
+        }
+
+
+        if (fecha === "90") {
+
+            filtros.push(
+                "d.fecha >= DATE_SUB(NOW(), INTERVAL 90 DAY)"
+            );
+
+        }
+
+
+        let where =
+            filtros.length
+            ? "WHERE " + filtros.join(" AND ")
+            : "";
+
+
+        const [datos] =
+        await db.query(
+        `
+        SELECT
+
+            c.modulo,
+
+            ROUND(
+                AVG(dd.puntaje) / 4 * 100,
+                1
+            ) AS porcentaje,
+
+            COUNT(DISTINCT d.id)
+            AS evaluaciones
+
+
+        FROM diagnostico_detalle dd
+
+
+        INNER JOIN criterios_diagnostico c
+        ON dd.criterio_id = c.id
+
+
+        INNER JOIN diagnosticos d
+        ON dd.diagnostico_id = d.id
+
+
+        ${where}
+
+
+        GROUP BY c.modulo
+
+        ORDER BY porcentaje DESC
+
+        `,
+        valores
+        );
+
+
+        res.json(datos);
+
+
+    } catch(error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            error:"Error obteniendo módulos"
+        });
+
+    }
+
+});
+
+
 
 /* =========================
    🚀 SERVER
