@@ -1670,23 +1670,12 @@ async function cargarDashboardModulos() {
 
 /* cargar automático solamente en modulos.html */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        if (
-            document
-            .getElementById(
-                "graficoModulos"
-            )
-        ){
-
-            cargarDashboardModulos();
-
-        }
-
+document.addEventListener("DOMContentLoaded", () => {
+    if (document.getElementById("graficoModulos")) {
+        cargarFiltrosModulos();
+        cargarDashboardModulos();
     }
-);
+});
 
 
 async function cargarFiltrosModulos() {

@@ -768,3 +768,44 @@ button.purple:hover {
     background:#f59e0b;
     color:white;
 }
+
+.body-modulos{
+    display:block;
+    height:auto;
+    min-height:100vh;
+    margin:0;
+    background:#f1f5f9;
+}
+
+.body-modulos header{
+    background:#1e40af;
+    color:white;
+    padding:22px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.body-modulos .panel,
+.body-modulos .cards-dashboard{
+    max-width:1200px;
+    margin:25px auto;
+}
+
+.body-modulos .cards-dashboard{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+}
+
+.body-modulos .card{
+    text-align:center;
+}
+
+.body-modulos .dashboard-grid{
+    max-width:1200px;
+    margin:25px auto;
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:25px;
+}
