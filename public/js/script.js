@@ -1454,11 +1454,7 @@ function mostrarEstadoUltimaActualizacion(fecha) {
 
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    if (document.getElementById("graficoModulos")) {
-        cargarUsoModulos();
-    }
-});
+
 
 /* =====================================================
    📊 DASHBOARD USO DE MÓDULOS
@@ -1691,3 +1687,52 @@ document.addEventListener(
 
     }
 );
+
+
+async function cargarFiltrosModulos() {
+    const filtroAsesor = document.getElementById("filtroAsesor");
+    const filtroColegio = document.getElementById("filtroColegio");
+
+    if (!filtroAsesor || !filtroColegio) return;
+
+    const resAsesores = await fetch(`${API}/asesores`);
+    const asesores = await resAsesores.json();
+
+    asesores.forEach(a => {
+        filtroAsesor.innerHTML += `
+            <option value="${a.id}">
+                ${a.nombre}
+            </option>
+        `;
+    });
+
+    filtroAsesor.addEventListener("change", async () => {
+        filtroColegio.innerHTML = `
+            <option value="">
+                Todos los colegios
+            </option>
+        `;
+
+        if (!filtroAsesor.value) {
+            await cargarDashboardModulos();
+            return;
+        }
+
+        const resColegios = await fetch(`${API}/colegios/${filtroAsesor.value}`);
+        const colegios = await resColegios.json();
+
+        colegios.forEach(c => {
+            filtroColegio.innerHTML += `
+                <option value="${c.id}">
+                    ${c.nombre}
+                </option>
+            `;
+        });
+
+        await cargarDashboardModulos();
+    });
+
+    filtroColegio.addEventListener("change", cargarDashboardModulos);
+    document.getElementById("filtroFecha")?.addEventListener("change", cargarDashboardModulos);
+    document.getElementById("filtroNivel")?.addEventListener("change", cargarDashboardModulos);
+}
