@@ -1,4 +1,4 @@
-const API = "";
+const API = "https://sistemarecuperacion-production.up.railway.app";
 const equivalencia = {
     AD: 4,
     A: 3,
