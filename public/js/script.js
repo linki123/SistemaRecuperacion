@@ -309,34 +309,63 @@ function mejorarTablaModulos() {
 }
 
 function calcularPromedioModulos() {
+
     const filas = document.querySelectorAll("#tablaEvaluacion tr");
+
     const resumen = {};
 
+    let moduloActual = "";
+
     filas.forEach(fila => {
-        const modulo = fila.children[0].innerText.trim();
-        const nota = fila.querySelector(".nota")?.value;
+
+        const celdaModulo = fila.children[0];
+
+        if (celdaModulo.innerText.trim() !== "") {
+            moduloActual = celdaModulo.innerText.trim();
+        }
+
+        const nota =
+            fila.querySelector(".nota")?.value;
 
         if (!nota) return;
 
-        if (!resumen[modulo]) {
-            resumen[modulo] = {
+
+        if (!resumen[moduloActual]) {
+
+            resumen[moduloActual] = {
                 total: 0,
                 cantidad: 0
             };
+
         }
 
-        resumen[modulo].total += equivalencia[nota];
-        resumen[modulo].cantidad++;
+
+        resumen[moduloActual].total += equivalencia[nota];
+        resumen[moduloActual].cantidad++;
+
     });
 
-    console.log("Promedio por módulo:");
+
+    console.clear();
+
+    console.log("📊 Uso por módulo:");
 
     Object.keys(resumen).forEach(modulo => {
-        const promedio = resumen[modulo].total / resumen[modulo].cantidad;
-        const porcentaje = ((promedio / 4) * 100).toFixed(1);
 
-        console.log(`${modulo}: ${porcentaje}%`);
+        const promedio =
+            resumen[modulo].total /
+            resumen[modulo].cantidad;
+
+        const porcentaje =
+            ((promedio / 4) * 100).toFixed(1);
+
+
+        console.log(
+            `${modulo}: ${porcentaje}%`
+        );
+
     });
+
 }
 /* =====================================================
    📈 PROGRESO COLEGIO
